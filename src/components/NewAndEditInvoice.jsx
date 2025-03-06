@@ -14,7 +14,7 @@ const newItemObj = {
   total: 0,
 };
 
-export default function NewAndEditInvoice({ isModalOpen }) {
+export default function NewAndEditInvoice({ isDesktop }) {
 
   const { invoiceData, setInvoiceData } = useContext(PageContext);
 
@@ -62,6 +62,7 @@ export default function NewAndEditInvoice({ isModalOpen }) {
     setIsOpen(false);
   };
 
+  // yeni invoice eklemek için
   const newInvoice = (e) => {
     e.preventDefault();
     const form = new FormData(e.target);
@@ -79,6 +80,7 @@ export default function NewAndEditInvoice({ isModalOpen }) {
     e.target.reset();
   };
 
+  // invoice editlemek için
   const updatedInvoice = (e) => {
     e.preventDefault();
     const form = new FormData(e.target);
@@ -100,7 +102,7 @@ export default function NewAndEditInvoice({ isModalOpen }) {
 
   return (
     <>
-      {!isModalOpen && <div className="go-back-btn">
+      {!isDesktop && <div className="go-back-btn">
         <button onClick={() => location.hash = "/"}>
           <img src="/img/back-arrow-icon.svg" alt="Back Arrow Icon" />
           Go back

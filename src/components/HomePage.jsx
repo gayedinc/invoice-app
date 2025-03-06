@@ -6,38 +6,20 @@ export default function HomePage() {
   const [dropdown, setDropdown] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { invoiceData, setInvoiceData } = useContext(PageContext);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
 
   useEffect(() => {
-    const checkModalCondition = () => {
-      const isMobile = window.innerWidth < 768;
-      const isNewInvoicePage = window.location.hash.includes("new-invoice");
-
-      if (!isMobile && isNewInvoicePage) {
-        setIsModalOpen(true);
-        console.log("Modal açıldı (Tablet/Desktop)");
-      } else {
-        setIsModalOpen(false);
-        console.log("Modal kapalı");
-      }
-    };
-
-    // Sayfa yüklendiğinde kontrol et
-    checkModalCondition();
-
-    // Hash değişimlerini dinle
-    window.addEventListener("hashchange", checkModalCondition);
-
-    return () => {
-      window.removeEventListener("hashchange", checkModalCondition);
-    };
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-
-  const closeInvoiceForm = () => {
-    setIsModalOpen(false);
-    window.location.hash = "";
-    console.log('modal kapandı çünkü modal overlaye bastım')
-  };
+  useEffect(() => {
+    const handleResize = () => setIsDesktop(window.innerWidth >= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <>
@@ -48,7 +30,7 @@ export default function HomePage() {
         </div>
         <div className="home-page-filter-new">
           <button className="filter-dropdown-btn" onClick={() => setDropdown(!dropdown)}>
-            <span>Filter</span>
+            {isDesktop ? <span>Filter by status</span> : <span>Filter</span>}
             <img src="/img/dropdown-arrow-icon.svg" alt="Dropdown Icon" />
           </button>
           {dropdown && (
@@ -59,20 +41,20 @@ export default function HomePage() {
             </div>
           )}
           <div className="home-page-new-button">
-            <button onClick={() => (window.location.hash = "/new-invoice")}>
+            <button onClick={() => (isDesktop ? setIsModalOpen(true) : (window.location.hash = "/new-invoice"))}>
               <img src="/img/new-icon.svg" alt="New Icon" />
-              <span>New</span>
+              {isDesktop ? <span>New Invoice</span> : <span>New</span>}
             </button>
           </div>
         </div>
       </div>
       <div className="invoice-page">
-        {invoiceData ? <Invoices invoiceData={invoiceData} /> : <NothingHere />}
+        {invoiceData && invoiceData.length > 0 ? <Invoices invoiceData={invoiceData} /> : <NothingHere />}
       </div>
-      {isModalOpen && (
-        <div className="modal-overlay" onClick={closeInvoiceForm}>
+      {isDesktop && isModalOpen && (
+        <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <NewAndEditInvoice isModalOpen={isModalOpen} />
+            <NewAndEditInvoice isDesktop={isDesktop} />
           </div>
         </div>
       )}
@@ -114,7 +96,7 @@ function NothingHere() {
         <h1>There is nothing here</h1>
         <h4>
           Create an invoice by clicking the
-          <strong> New</strong> button and get started
+          <strong> New Invoice</strong> button and get started
         </h4>
       </div>
     </div>

@@ -30,7 +30,7 @@ export default function InvoiceDetails() {
 
         <div className="status-section">
           <h4>Status</h4>
-          <span className={`invoice-status ${invoice.status.toLowerCase()}`}>
+          <span className={`invoice-status ${invoice.status}`}>
             <svg width="8" height="8" viewBox="0 0 8 8" xmlns="http://www.w3.org/2000/svg">
               <circle cx="4" cy="4" r="4" />
             </svg>
@@ -44,57 +44,43 @@ export default function InvoiceDetails() {
         </div>
 
         <div className="invoices-detail-contents">
-          <div key={invoice.id} className="invoice-item">
-            <h3 className="invoice-detail-id">
-              <span>#</span>
-              {invoice.id}
-            </h3>
-            <h4 className="detail-client-name">{invoice["client-name"]}</h4>
-            <div className="detail-invoice-date">
-              <h3>Invoice Date</h3>
-              <span>{invoice["invoice-date"]}</span>
+          <div key={invoice.id} className="invoice-item-detail">
+            <div className="detail-title">
+              <h3 className="invoice-detail-id">
+                <span>#</span>
+                {invoice.id}
+              </h3>
+              <span className="detail-project-desc">{invoice["project-description"]}</span>
             </div>
-            <div className="detail-total-amount">
-              <h3>Grand Total</h3>
-              <span>
-                £ {Number(invoice["grandTotal"] || 0).toFixed(2)}
-              </span>
+            <div className="detail-adress">
+              <span>{invoice["bill-from-streetAdress"]}</span>
+              <span>{invoice["bill-from-city"]}</span>
+              <span>{invoice["bill-from-postcode"]}</span>
+              <span>{invoice["bill-from-country"]}</span>
             </div>
-            {/* Bill From Section */}
-            <div className="bill-from-details">
-              <h3>Bill From</h3>
-              <p>Street Address:{invoice["bill-from-streetAdress"]}</p>
-              <p>City:{invoice["bill-from-city"]}</p>
-              <p>Post Code:{invoice["bill-from-postcode"]}</p>
-              <p>Country:{invoice["bill-from-country"]}</p>
-
-              {/* Mobil ve Tablet için ayrı veriler */}
-              {invoice["bill-from-city"] && (
-                <p>City: {invoice["bill-from-city"]}</p>
-              )}
-              {invoice["bill-from-postcode"] && (
-                <p>Post Code: {invoice["bill-from-postcode"]}</p>
-              )}
-              {invoice["bill-from-country"] && (
-                <p>Country: {invoice["bill-from-country"]}</p>
-              )}
-            </div>
-
-            {/* Bill To Section */}
-            <div className="bill-to-details">
-              <h3>Bill To</h3>
-              <p>Client's Name:{invoice["client-name"]}</p>
-              <p>Client's Email:{invoice["client-email"]}</p>
-              <p>Street Address:{invoice["client-street"]}</p>
-              <p>City:{invoice["bill-to-city"]}</p>
-              <p>Post Code:{invoice["bill-to-postcode"]}</p>
-              <p>Country:{invoice["bill-to-country"]}</p>
-            </div>
-
-            {/* Payment Terms Section */}
-            <div className="payment-terms-details">
-              <h3>Payment Terms</h3>
-              <p>{invoice["paymentTerms"]}</p>
+            <div className="detail-info">
+              <div className="invoice-detail-date">
+                <span>Invoice Date</span>
+                <h4>{invoice["invoice-date"]}</h4>
+              </div>
+              <div className="invoice-detail-payment-due">
+                <span>Payment Due</span>
+                <h4>{invoice["invoice-date"]}</h4>
+              </div>
+              <div className="invoice-details-billto">
+                <span>Bill To</span>
+                <h4>{invoice["client-name"]}</h4>
+                <div className="detail-adress-billto">
+                  <span>{invoice["client-street"]}</span>
+                  <span>{invoice["bill-to-city"]}</span>
+                  <span>{invoice["bill-to-postcode"]}</span>
+                  <span>{invoice["bill-to-country"]}</span>
+                </div>
+              </div>
+              <div className="detail-email">
+                <span>Send to</span>
+                <h4>{invoice["client-email"]}</h4>
+              </div>
             </div>
           </div>
         </div>
