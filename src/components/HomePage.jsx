@@ -1,25 +1,21 @@
 import React, { useContext, useEffect, useState } from "react";
-import { PageContext } from "../App";
-import NewAndEditInvoice from "./NewAndEditInvoice";
+import { InvoiceContext } from "./InvoiceContext";
 
 export default function HomePage() {
+  const { invoiceData, setInvoiceData, isEdit, setEdit, currentInvoice,
+    setCurrentInvoice, isModalOpen, setIsModalOpen, isDesktop } = useContext(InvoiceContext);
   const [dropdown, setDropdown] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const { invoiceData, setInvoiceData } = useContext(PageContext);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
 
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  function handleNewInvoice() {
 
-  useEffect(() => {
-    const handleResize = () => setIsDesktop(window.innerWidth >= 768);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    if (isDesktop) {
+      setIsModalOpen(true);
+    }
+    else {
+      window.location.hash = "/new-invoice";
+    }
+    setEdit(false);
+  }
 
   return (
     <>
@@ -41,7 +37,7 @@ export default function HomePage() {
             </div>
           )}
           <div className="home-page-new-button">
-            <button onClick={() => (isDesktop ? setIsModalOpen(true) : (window.location.hash = "/new-invoice"))}>
+            <button onClick={handleNewInvoice}>
               <img src="/img/new-icon.svg" alt="New Icon" />
               {isDesktop ? <span>New Invoice</span> : <span>New</span>}
             </button>
@@ -51,13 +47,6 @@ export default function HomePage() {
       <div className="invoice-page">
         {invoiceData && invoiceData.length > 0 ? <Invoices invoiceData={invoiceData} /> : <NothingHere />}
       </div>
-      {isDesktop && isModalOpen && (
-        <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <NewAndEditInvoice isDesktop={isDesktop} />
-          </div>
-        </div>
-      )}
     </>
   );
 }
@@ -71,8 +60,8 @@ function Invoices({ invoiceData }) {
             <span>#</span>
             {invoice.id}
           </h3>
-          <h4 className="client-name">{invoice["client-name"]}</h4>
-          <p className="due-date">Due {invoice["invoice-date"]}</p>
+          <h4 className="client-name">{invoice["clientName"]}</h4>
+          <p className="due-date">Due {invoice["invoiceDate"]}</p>
           <span className={`invoice-status ${invoice.status.toLowerCase()}`}>
             <svg width="8" height="8" viewBox="0 0 8 8" xmlns="http://www.w3.org/2000/svg">
               <circle cx="4" cy="4" r="4" />

@@ -918,7 +918,21 @@ form {
   .invoice-item-detail {
     padding: 32px;
     grid-template-columns: repeat(2, 1fr);
-}
+  }
+
+  .detail-adress {
+    text-align: right;
+  }
+
+  .detail-info {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .detail-email {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  
 }
 
 /* Desktop Start */

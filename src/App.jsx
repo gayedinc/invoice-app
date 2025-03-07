@@ -1,8 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import Header from "./components/Header";
 import { getPage } from "./helper";
-
-export const PageContext = createContext(null); // sayfa geçişi ve yönetimi için useContext
+import { InvoiceProvider } from "./components/InvoiceContext";
 
 export function getUrlParam() {
   const parts = location.hash.substring(1).split('/');
@@ -11,7 +10,6 @@ export function getUrlParam() {
 
 function App() {
   const [url, setUrl] = useState(location.hash.substring(1) || "/");
-  const [invoiceData, setInvoiceData] = useState([]);
 
   useEffect(() => {
     window.addEventListener("hashchange", () => {
@@ -23,14 +21,15 @@ function App() {
 
   return (
     <>
-      <Header />
-      <PageContext.Provider value={{ page, invoiceData, setInvoiceData }}>
+      <InvoiceProvider>
+        <Header />
         <div className="container">
           <div className="page-component">
             {page}
           </div>
         </div>
-      </PageContext.Provider>
+      </InvoiceProvider>
+
     </>
   )
 }
