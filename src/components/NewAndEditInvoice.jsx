@@ -15,7 +15,8 @@ function generateXMString() {
 // };
 
 export default function NewAndEditInvoice() {
-  const { invoiceData, setInvoiceData, isEdit, setEdit, currentInvoice, setCurrentInvoice, isDesktop } = useContext(InvoiceContext);
+  const { invoiceData, setInvoiceData, isEdit, setEdit, currentInvoice,
+    setCurrentInvoice, isModalOpen, setIsModalOpen, isDesktop } = useContext(InvoiceContext);
 
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("Net 30 Days");
@@ -82,7 +83,7 @@ export default function NewAndEditInvoice() {
     };
 
     setInvoiceData([...invoiceData, newInvoiceData]);
-    console.log("Yeni Fatura:", newInvoiceData);
+    setIsModalOpen(false);
     e.target.reset();
   };
 
@@ -100,9 +101,6 @@ export default function NewAndEditInvoice() {
       paymentTerms: selectedOption, // Eğer seçilen ödeme terimi varsa
     };
 
-    // Güncellenmiş fatura konsola yazdır
-    console.log("Güncellenmiş Fatura:", updatedInvoiceData);
-
     // Veritabanına (state) kaydetme
     setInvoiceData((prevData) =>
       prevData.map((inv) =>
@@ -112,10 +110,9 @@ export default function NewAndEditInvoice() {
 
     setEdit(false);
     setCurrentInvoice(null);
+    setIsModalOpen(false);
     e.target.reset();
   };
-
-  console.log(items)
 
   return (
     <>
@@ -226,7 +223,6 @@ export default function NewAndEditInvoice() {
                     value={item.itemName}
                     onChange={(e) => {
                       items[index].itemName = e.target.value;
-                      console.log(index);
                       setItems([...items]);
                     }} required />
                 </div>

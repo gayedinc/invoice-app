@@ -569,6 +569,27 @@ form {
   grid-row: 3;
 }
 
+.footer-btns-edit {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 7px;
+  padding: 21px 24px 22px;
+  background-color: #FFFFFF;
+  box-shadow: 0px 10px 10px -10px #48549F1A;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 15px;
+  letter-spacing: -0.25px;
+
+  button {
+    border: none;
+    border-radius: 24px;
+    height: 48px;
+    cursor: pointer;
+  }
+}
+
 .footer-btn-new-tab-desk {
   display: flex;
   justify-content: center;
@@ -586,6 +607,7 @@ form {
     border: none;
     border-radius: 24px;
     height: 48px;
+    cursor: pointer;
   }
 
   .footer-btn-right-side {
@@ -594,7 +616,7 @@ form {
   }
 }
 
-.discard-btn {
+.discard-btn, .cancel-btn {
   background-color: #F9FAFE;
   color: #7E88C3;
   width: 84px;
@@ -606,7 +628,7 @@ form {
   width: 117px;
 }
 
-.save-send-btn {
+.save-send-btn, .save-changes-btn {
   background-color: #7C5DFA;
   color: #FFFFFF;
   width: 112px;
