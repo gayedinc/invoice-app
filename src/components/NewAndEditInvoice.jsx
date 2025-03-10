@@ -1,5 +1,6 @@
 import { useState, useContext, useRef } from "react";
 import { InvoiceContext } from ".//InvoiceContext";
+import toast from "react-hot-toast"
 
 // Rastgele 4 rakam üretme fonksiyonu
 function generateXMString() {
@@ -48,6 +49,7 @@ export default function NewAndEditInvoice() {
       price: 0,
       total: 0,
     }]);
+    toast.success("Item added successfully!");
   };
 
   const handleDeleteItem = (index) => {
@@ -84,6 +86,7 @@ export default function NewAndEditInvoice() {
 
     setInvoiceData([...invoiceData, newInvoiceData]);
     setIsModalOpen(false);
+    toast.success("Invoice added successfully!");
     e.target.reset();
   };
 
@@ -111,20 +114,21 @@ export default function NewAndEditInvoice() {
     setEdit(false);
     setCurrentInvoice(null);
     setIsModalOpen(false);
+    toast.success("Invoice updated successfully!");
     e.target.reset();
   };
 
   return (
     <>
-      {!isDesktop && <div className="go-back-btn">
-        <button onClick={() => location.hash = "/"}>
+      {!isDesktop &&
+        <button className="go-back-btn" onClick={() => location.hash = "/"}>
           <img src="/img/back-arrow-icon.svg" alt="Back Arrow Icon" />
           Go back
         </button>
-      </div>}
+      }
 
       <div className="form-section">
-        {isEdit ? <h2>Edit {currentInvoice?.id}</h2> : <h2>New Invoice</h2>}
+        {isEdit ? <h2>Edit <span>#</span>{currentInvoice?.id}</h2> : <h2>New Invoice</h2>}
         <form onSubmit={isEdit ? updatedInvoice : newInvoice} autoComplete="off">
           <div className="bill-from">
             <h3>Bill From</h3>

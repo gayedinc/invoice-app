@@ -289,28 +289,45 @@ header {
   fill: #ff8f00;
 }
 
-.go-back-btn button, .go-back-btn-detail button {
+.invoice-details {
+  margin-top: 32px;
+  padding-inline: 24px;
+}
+
+.go-back-btn, .go-back-btn-detail {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 23.66px;
-  padding: 33px 24px 26px;
   border: none;
   background: none;
   font-size: 15px;
   font-weight: 700;
   line-height: 15px;
   letter-spacing: -0.25px;
+  cursor: pointer;
 }
 
-.form-section h2 {
-  font-size: 24px;
-  font-weight: 700;
-  line-height: 32px;
-  letter-spacing: -0.5px;
-  color: #0C0E16;
-  padding: 26px 24px 22px;
-  background-color: #fff;
+.form-section {
+
+  h2 {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 32px;
+    letter-spacing: -0.5px;
+    color: #0C0E16;
+    padding: 26px 24px 22px;
+    background-color: #fff;
+  }
+
+  span {
+    font-family: League Spartan;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 32px;
+    letter-spacing: -0.5px;
+    color: #888eb0;
+  }
 }
 
 .bill-from, .bill-to {
@@ -638,7 +655,7 @@ form {
   display: grid;
   grid-template-columns: 1fr;
   gap: 16px;
-  padding-inline: 24px;
+  margin-top: 32px;
 }
 
 .status-section {
@@ -848,8 +865,8 @@ form {
     z-index: 999;
     overflow: auto;
   }
-
-  .invoice-details-container {
+  
+  .invoice-details {
     padding-inline: 0;
     max-width: 688px;
     margin-inline: auto;

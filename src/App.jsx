@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import Header from "./components/Header";
 import { getPage } from "./helper";
 import { InvoiceProvider } from "./components/InvoiceContext";
+import { Toaster } from "react-hot-toast";
 
 export function getUrlParam() {
   const parts = location.hash.substring(1).split('/');
@@ -22,6 +23,7 @@ function App() {
   return (
     <>
       <InvoiceProvider>
+        <Toaster position="top-center" reverseOrder={false} />
         <Header />
         <div className="container">
           <div className="page-component">
