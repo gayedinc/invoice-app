@@ -34,8 +34,6 @@ export function InvoiceProvider({ children }) {
     localStorage.invoiceData = JSON.stringify(invoiceData);
   }, [invoiceData]);
 
-  console.log(invoiceData)
-
   return (
     <InvoiceContext.Provider
       value={{

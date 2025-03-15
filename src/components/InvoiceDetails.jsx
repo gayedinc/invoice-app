@@ -109,6 +109,29 @@ export default function InvoiceDetails() {
                   </div>
                 </div>
               </div>
+              <div className="item-detail-content">
+                <h3>Item List</h3>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Item Name</th>
+                      <th>Qty</th>
+                      <th>Price</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {invoice.items && invoice.items.map((item, index) => (
+                      <tr key={index}>
+                        <td>{item.itemName}</td>
+                        <td>{item.quantitiy}</td>
+                        <td>${item.price.toFixed(2)}</td>
+                        <td>${(item.quantitiy * item.price).toFixed(2)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
 
             </div>
             <div className="footer-btns-details">

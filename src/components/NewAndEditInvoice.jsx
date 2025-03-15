@@ -223,7 +223,7 @@ export default function NewAndEditInvoice() {
               <div key={index} className="item-info">
                 <div className="item-name">
                   <label>Item Name</label>
-                  <input type="text" name="item-name"
+                  <input type="text" name="itemName"
                     value={item.itemName}
                     onChange={(e) => {
                       items[index].itemName = e.target.value;
@@ -233,7 +233,7 @@ export default function NewAndEditInvoice() {
 
                 <div className="item-qty">
                   <label>Qty.</label>
-                  <input type="number" name="item-qty"
+                  <input type="number" name="itemQty"
                     value={item.quantitiy === 0 ? '' : item.quantitiy}
                     onChange={(e) => {
                       items[index].quantitiy = parseInt(e.target.value);
@@ -243,7 +243,7 @@ export default function NewAndEditInvoice() {
 
                 <div className="item-price">
                   <label>Price</label>
-                  <input type="number" step="0.01" name="item-price"
+                  <input type="number" step="0.01" name="itemPrice"
                     value={item.price === 0 ? '' : item.price}
                     onChange={(e) => {
                       items[index].price = parseFloat(e.target.value);
