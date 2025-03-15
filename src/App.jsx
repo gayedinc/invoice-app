@@ -4,6 +4,7 @@ import { getPage } from "./helper";
 import { InvoiceProvider } from "./components/InvoiceContext";
 import { Toaster } from "react-hot-toast";
 
+
 export function getUrlParam() {
   const parts = location.hash.substring(1).split('/');
   return parts.length > 1 ? parts.slice(1).join('/') : null;

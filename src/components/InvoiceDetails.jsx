@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { InvoiceContext } from ".//InvoiceContext";
+import { InvoiceContext } from "./InvoiceContext";
 import NothingHere from "./HomePage";
 import toast from "react-hot-toast"
 
@@ -90,7 +90,7 @@ export default function InvoiceDetails() {
                     </div>
                     <div className="invoice-detail-payment-due">
                       <span>Payment Due</span>
-                      <h4>{invoice["invoiceDate"]}</h4>
+                      <h4>{invoice["paymentDue"]}</h4>
                     </div>
                     <div className="invoice-details-billto">
                       <span>Bill To</span>
@@ -130,6 +130,7 @@ export default function InvoiceDetails() {
                       </tr>
                     ))}
                   </tbody>
+                  {/* <p>grand total {invoice.grandTotal}</p> */}
                 </table>
               </div>
 

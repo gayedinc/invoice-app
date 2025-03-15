@@ -1,6 +1,7 @@
-import { useState, useContext, useRef } from "react";
-import { InvoiceContext } from ".//InvoiceContext";
+import { useState, useContext, useRef, useEffect } from "react";
+import { InvoiceContext } from "./InvoiceContext";
 import toast from "react-hot-toast"
+import { use } from "react";
 
 // Rastgele 4 rakam üretme fonksiyonu
 function generateXMString() {
@@ -20,7 +21,7 @@ export default function NewAndEditInvoice() {
     setCurrentInvoice, isModalOpen, setIsModalOpen, isDesktop } = useContext(InvoiceContext);
 
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("Net 30 Days");
+  const [selectedOption, setSelectedOption] = useState(isEdit ? currentInvoice.paymentTerms : "Net 30 Days");
   const [items, setItems] = useState([{
     itemName: "",
     quantitiy: 0,
@@ -71,52 +72,63 @@ export default function NewAndEditInvoice() {
   };
 
   // yeni invoice eklemek için
-  const newInvoice = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const form = new FormData(e.target);
     const formObj = Object.fromEntries(form);
     console.log("Form Objesi:", formObj);
 
+    const date = new Date(formObj.invoiceDate);
+    if (selectedOption === "Net 1 Day") {
+      date.setDate(date.getDate() + 1);
+    } else if (selectedOption === "Net 7 Days") {
+      date.setDate(date.getDate() + 7);
+    } else if (selectedOption === "Net 14 Days") {
+      date.setDate(date.getDate() + 14);
+    } else if (selectedOption === "Net 30 Days") {
+      date.setDate(date.getDate() + 30);
+    }
+
+    const paymentDue = date.toISOString().split("T")[0];
+
+    let grandTotal = 0;
+    items.map((item) => {
+      grandTotal += item.total;
+    });
+
     const newInvoiceData = {
       ...formObj,
-      id: generateXMString(),
+      id: isEdit ? currentInvoice.id : generateXMString(),
       status: "pending",
       paymentTerms: selectedOption,
+      items: [...items],
+      paymentDue,
+      grandTotal,
     };
 
-    setInvoiceData([...invoiceData, newInvoiceData]);
-    setIsModalOpen(false);
-    toast.success("Invoice added successfully!");
-    e.target.reset();
+
+
+    if (isEdit) {
+      invoiceData[invoiceData.findIndex((x) => x.id === currentInvoice.id)] = newInvoiceData;
+      setInvoiceData([...invoiceData]);
+      setEdit(false);
+      setCurrentInvoice(null);
+      setIsModalOpen(false);
+      toast.success("Invoice updated successfully!");
+    } else {
+      setInvoiceData([...invoiceData, newInvoiceData]);
+      setIsModalOpen(false);
+      toast.success("Invoice added successfully!");
+      e.target.reset();
+    }
+
   };
 
-  const updatedInvoice = (e) => {
-    e.preventDefault();
-
-    // Form verilerini al
-    const form = new FormData(e.target);
-    const formObj = Object.fromEntries(form);
-
-    // Güncellenmiş faturayı oluştur
-    const updatedInvoiceData = {
-      ...currentInvoice,
-      ...formObj,
-      paymentTerms: selectedOption, // Eğer seçilen ödeme terimi varsa
-    };
-
-    // Veritabanına (state) kaydetme
-    setInvoiceData((prevData) =>
-      prevData.map((inv) =>
-        inv.id === currentInvoice.id ? updatedInvoiceData : inv
-      )
-    );
-
-    setEdit(false);
-    setCurrentInvoice(null);
-    setIsModalOpen(false);
-    toast.success("Invoice updated successfully!");
-    e.target.reset();
-  };
+  useEffect(() => {
+    if (isEdit) {
+      setItems(structuredClone(currentInvoice.items))
+    }
+  }, [])
 
   return (
     <>
@@ -129,7 +141,7 @@ export default function NewAndEditInvoice() {
 
       <div className="form-section">
         {isEdit ? <h2>Edit <span>#</span>{currentInvoice?.id}</h2> : <h2>New Invoice</h2>}
-        <form onSubmit={isEdit ? updatedInvoice : newInvoice} autoComplete="off">
+        <form onSubmit={handleSubmit} autoComplete="off">
           <div className="bill-from">
             <h3>Bill From</h3>
             <label>Street Address</label>
@@ -223,7 +235,7 @@ export default function NewAndEditInvoice() {
               <div key={index} className="item-info">
                 <div className="item-name">
                   <label>Item Name</label>
-                  <input type="text" name="itemName"
+                  <input type="text"
                     value={item.itemName}
                     onChange={(e) => {
                       items[index].itemName = e.target.value;
@@ -233,7 +245,7 @@ export default function NewAndEditInvoice() {
 
                 <div className="item-qty">
                   <label>Qty.</label>
-                  <input type="number" name="itemQty"
+                  <input type="number"
                     value={item.quantitiy === 0 ? '' : item.quantitiy}
                     onChange={(e) => {
                       items[index].quantitiy = parseInt(e.target.value);
@@ -243,7 +255,7 @@ export default function NewAndEditInvoice() {
 
                 <div className="item-price">
                   <label>Price</label>
-                  <input type="number" step="0.01" name="itemPrice"
+                  <input type="number" step="0.01"
                     value={item.price === 0 ? '' : item.price}
                     onChange={(e) => {
                       items[index].price = parseFloat(e.target.value);
@@ -253,7 +265,7 @@ export default function NewAndEditInvoice() {
 
                 <div className="item-total-price">
                   <label>Total</label>
-                  <input type="number" value={item.total} disabled name="total" />
+                  <input type="number" value={item.total} disabled />
                 </div>
 
                 <button type="button" onClick={() => handleDeleteItem(index)}>
